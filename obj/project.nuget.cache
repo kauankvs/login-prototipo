@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "gpR/v+6x1k45d/ohywwGUPTtwgmeVe+loUd1sbDJzQJp8aeUb1rUszVncz2cIIxluaDWIjYIQjJNl1jRkOHTrA==",
+  "dgSpecHash": "wDrKq60upoBWc+bpINyufaUFPO+kflv3/EQB0jIMYxI+wW+oX3NmUOEIkiJff+KbBw4g+zmrg4u52IBh9UXWCQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\kauan\\Downloads\\projeto-c\\Login\\Login\\Login.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\kauan\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\kauan\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
     "C:\\Users\\kauan\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\kauan\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.11\\microsoft.aspnetcore.authentication.jwtbearer.6.0.11.nupkg.sha512",
     "C:\\Users\\kauan\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "C:\\Users\\kauan\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\kauan\\.nuget\\packages\\microsoft.data.sqlclient\\5.0.1\\microsoft.data.sqlclient.5.0.1.nupkg.sha512",
