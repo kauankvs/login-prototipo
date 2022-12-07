@@ -10,8 +10,8 @@ namespace Login.Service
     public class UsuarioService : IUsuarioService
     {
         private readonly LoginContext _context;
-        private readonly Autenticacao _auth;
-        public UsuarioService(LoginContext context, Autenticacao senha) 
+        private readonly IAutenticacao _auth;
+        public UsuarioService(LoginContext context, IAutenticacao senha) 
         {
             _context = context;
             _auth = senha;
@@ -58,9 +58,12 @@ namespace Login.Service
             return new OkObjectResult(token);
         }
 
-        public async Task<ActionResult<Usuario>> DeletarUsuarioAsync(EmailESenhaDTO emailESenhaDTO) 
+        public async Task<ActionResult<Usuario>> DeletarUsuarioAsync(string email, string senha) 
         {
-            Usuario usuario = await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(user => user.Email.Equals(emailESenhaDTO.Email));
+            if (_auth.ChecarSeSenhaECorretaAsync(senha, email).Equals(false))
+                return new ConflictResult();
+
+            Usuario usuario = await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(user => user.Email.Equals(email));
             _context.Usuarios.Remove(usuario);
             await _context.SaveChangesAsync();
             return new AcceptedResult();

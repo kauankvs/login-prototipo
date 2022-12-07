@@ -11,7 +11,6 @@
         public DateTime DataDeCriacao { get; set; }
         public Papel Papel { get; set; }
     }
-
     public enum Papel 
     {
         Gerente,

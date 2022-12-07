@@ -8,6 +8,6 @@ namespace Login.Service
     {
         public Task<ActionResult<Usuario>> RegistrarAsync(UsuarioDTO usuarioDTO);
         public Task<ActionResult<string>> LoginAsync(EmailESenhaDTO usuario);
-        public Task<ActionResult<Usuario>> DeletarUsuarioAsync(EmailESenhaDTO emailESenhaDTO);
+        public Task<ActionResult<Usuario>> DeletarUsuarioAsync(string email, string senha);
     }
 }
