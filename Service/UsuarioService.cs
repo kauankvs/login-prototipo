@@ -1,31 +1,32 @@
 ﻿using Login.Context;
+using Login.Controllers;
 using Login.DTOs;
 using Login.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Login.Service
 {
     public class UsuarioService
     {
         private readonly LoginContext _context;
-        private readonly Senha _senha;
-        public UsuarioService(LoginContext context, Senha senha) 
+        private readonly Autenticacao _auth;
+        public UsuarioService(LoginContext context, Autenticacao senha) 
         {
             _context = context;
-            _senha = senha;
+            _auth = senha;
         }
 
-        public async Task<ActionResult<Usuario>> Registrar(UsuarioDTO usuarioDTO) 
+        public async Task<ActionResult<Usuario>> RegistrarAsync(UsuarioDTO usuarioDTO) 
         {
             byte[] senhaHash;
             byte[] senhaSalt;
-            bool usuarioExiste = await _senha.ChecarQueUsuarioExisteAsync(usuarioDTO.Email);
+            bool usuarioExiste = await _auth.ChecarQueUsuarioExisteAsync(usuarioDTO.Email);
             if (usuarioExiste.Equals(true))
             {
                 return new ConflictResult();
             }
-
-            _senha.CriarSenhaComHashESalt(usuarioDTO.Senha, out senhaHash, out senhaSalt);
+            _auth.CriarSenhaComHashESalt(usuarioDTO.Senha, out senhaHash, out senhaSalt);
             Usuario usuario = new Usuario()
             {
                 Nome = usuarioDTO.Nome,
@@ -38,8 +39,26 @@ namespace Login.Service
             };
             await _context.Usuarios.AddAsync(usuario);
             await _context.SaveChangesAsync();
-            return new CreatedResult("local", usuario);
+            return new CreatedResult(nameof(UsuarioController), usuario);
         }
+        
+        public async Task<ActionResult<string>> LoginAsync(EmailESenhaDTO usuario) 
+        {
+            bool usuarioExiste = await _auth.ChecarQueUsuarioExisteAsync(usuario.Email);
+            if (usuarioExiste.Equals(false))
+            {
+                return new NotFoundObjectResult(usuario);
+            }
+            bool senheECorreta = await _auth.ChecarSeSenhaECorretaAsync(usuario.Senha, usuario.Email);
+            if (senheECorreta.Equals(false)) 
+            {
+                return new ForbidResult();
+            }
+            var token = await _auth.CriarTokenAsync(usuario.Email);
+            return new OkObjectResult(token);
+        }
+
+
 
     }
 }
