@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Login.Service
 {
-    public class UsuarioService
+    public class UsuarioService : IUsuarioService
     {
         private readonly LoginContext _context;
         private readonly Autenticacao _auth;
@@ -58,6 +58,13 @@ namespace Login.Service
             return new OkObjectResult(token);
         }
 
+        public async Task<ActionResult<Usuario>> DeletarUsuarioAsync(EmailESenhaDTO emailESenhaDTO) 
+        {
+            Usuario usuario = await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(user => user.Email.Equals(emailESenhaDTO.Email));
+            _context.Usuarios.Remove(usuario);
+            await _context.SaveChangesAsync();
+            return new AcceptedResult();
+        }
 
 
     }
