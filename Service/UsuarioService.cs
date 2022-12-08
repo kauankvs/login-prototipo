@@ -19,13 +19,11 @@ namespace Login.Service
 
         public async Task<ActionResult<Usuario>> RegistrarAsync(UsuarioDTO usuarioDTO) 
         {
-            byte[] senhaHash;
-            byte[] senhaSalt;
+            byte[] senhaHash, senhaSalt;
             bool usuarioExiste = await _auth.ChecarQueUsuarioExisteAsync(usuarioDTO.Email);
             if (usuarioExiste.Equals(true))
-            {
                 return new ConflictResult();
-            }
+
             _auth.CriarSenhaComHashESalt(usuarioDTO.Senha, out senhaHash, out senhaSalt);
             Usuario usuario = new Usuario()
             {
@@ -46,14 +44,12 @@ namespace Login.Service
         {
             bool usuarioExiste = await _auth.ChecarQueUsuarioExisteAsync(usuario.Email);
             if (usuarioExiste.Equals(false))
-            {
                 return new NotFoundObjectResult(usuario);
-            }
-            bool senheECorreta = await _auth.ChecarSeSenhaECorretaAsync(usuario.Senha, usuario.Email);
-            if (senheECorreta.Equals(false)) 
-            {
+            
+            bool senheCorreta = await _auth.ChecarSeSenhaECorretaAsync(usuario.Senha, usuario.Email);
+            if (senheCorreta.Equals(false)) 
                 return new ForbidResult();
-            }
+
             var token = await _auth.CriarTokenAsync(usuario.Email);
             return new OkObjectResult(token);
         }
@@ -69,6 +65,31 @@ namespace Login.Service
             return new AcceptedResult();
         }
 
+        public async Task<ActionResult<Usuario>> MudarEmailAsync(string email, string emailNovo)  
+        {
+            Usuario usuario = await _context.Usuarios.FirstOrDefaultAsync(user => user.Email.Equals(email));
+            usuario.Email = emailNovo;
+            await _context.SaveChangesAsync();
+            return new AcceptedResult();
+        }
 
+        public async Task<ActionResult<Usuario>> MudarSenhaAsync(string email, string senha, string senhaNova) 
+        {
+            byte[] senhaHash, senhaSalt;
+            Usuario usuario;  
+
+            bool senhaCorreta = await _auth.ChecarSeSenhaECorretaAsync(senha, email);
+            if (senhaCorreta.Equals(false))
+                return new BadRequestResult();
+
+            usuario = await _context.Usuarios.FirstOrDefaultAsync(user => user.Email.Equals(email));
+            _auth.CriarSenhaComHashESalt(senhaNova, out senhaHash, out senhaSalt);
+            usuario.SenhaHash = senhaHash;
+            usuario.SenhaSalt = senhaSalt;
+            await _context.SaveChangesAsync();
+            return new AcceptedResult();
+        }
+
+        
     }
 }

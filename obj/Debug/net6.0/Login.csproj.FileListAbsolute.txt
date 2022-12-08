@@ -80,3 +80,4 @@ C:\Users\kauan\Downloads\projeto-c\Login\Login\obj\Debug\net6.0\refint\Login.dll
 C:\Users\kauan\Downloads\projeto-c\Login\Login\obj\Debug\net6.0\Login.pdb
 C:\Users\kauan\Downloads\projeto-c\Login\Login\obj\Debug\net6.0\Login.genruntimeconfig.cache
 C:\Users\kauan\Downloads\projeto-c\Login\Login\obj\Debug\net6.0\ref\Login.dll
+C:\Users\kauan\Downloads\projeto-c\Login\Login\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

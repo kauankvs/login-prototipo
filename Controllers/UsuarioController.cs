@@ -14,10 +14,8 @@ namespace Login.Controllers
     {
         private readonly IUsuarioService _service;
         public UsuarioController(IUsuarioService service) 
-        {
-            _service = service;
-        }
-
+            => _service = service;
+        
         [HttpPost]
         [AllowAnonymous]
         [Route("registrar")]
@@ -34,10 +32,19 @@ namespace Login.Controllers
         [Authorize]
         [Route("deletar")]
         public async Task<ActionResult<Usuario>> DeletarUsuarioAsync([FromForm] string senha) 
-            =>  await _service.DeletarUsuarioAsync(User.FindFirstValue(ClaimTypes.Email), senha); 
-        
+            =>  await _service.DeletarUsuarioAsync(User.FindFirstValue(ClaimTypes.Email), senha);
 
+        [HttpPut]
+        [Authorize]
+        [Route("alterar/email")]
+        public async Task<ActionResult<Usuario>> MudarEmailAsync([FromForm] string emailNovo)
+            => await _service.MudarEmailAsync(User.FindFirstValue(ClaimTypes.Email), emailNovo);
 
+        [HttpPut]
+        [Authorize]
+        [Route("alterar/senha")]
+        public async Task<ActionResult<Usuario>> MudarSenhaAsync(string email,[FromForm] string senha, [FromForm] string senhaNova)
+            => await _service.MudarSenhaAsync(User.FindFirstValue(ClaimTypes.Email), senha, senhaNova);
         
     }
 }

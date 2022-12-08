@@ -49,7 +49,7 @@ namespace Login.Service
         public async Task<string> CriarTokenAsync(string email)
         {
             Usuario usuario = await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(user => user.Email.Equals(email));
-            var chave = Encoding.ASCII.GetBytes(_configuration.GetSection("AppSettings:Token").Value);
+            var chave = Encoding.ASCII.GetBytes(Settings.Segredo);
             var gerenciadorToken = new JwtSecurityTokenHandler();
             var descritorToken = new SecurityTokenDescriptor()
             {

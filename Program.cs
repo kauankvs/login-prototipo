@@ -1,3 +1,4 @@
+using Login;
 using Login.Context;
 using Login.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -7,8 +8,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string chaveEmString = new ConfigurationManager().GetSection("AppSettings:Token").Value;
-byte[] chave = Encoding.ASCII.GetBytes(chaveEmString);
+byte[] chave = Encoding.ASCII.GetBytes(Settings.Segredo);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
