@@ -59,7 +59,7 @@ namespace Login.Service
             if (_auth.ChecarSeSenhaECorretaAsync(senha, email).Equals(false))
                 return new ConflictResult();
 
-            Usuario usuario = await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(user => user.Email.Equals(email));
+            Usuario usuario = await _context.Usuarios.FirstOrDefaultAsync(user => user.Email.Equals(email));
             _context.Usuarios.Remove(usuario);
             await _context.SaveChangesAsync();
             return new AcceptedResult();
@@ -90,6 +90,30 @@ namespace Login.Service
             return new AcceptedResult();
         }
 
+        public async Task<ActionResult<Usuario>> MudarPapelDaContaAsync(string email, string senha)
+        {
+            bool usuarioExiste = await _auth.ChecarQueUsuarioExisteAsync(email);
+            if (usuarioExiste.Equals(false))
+                return new NotFoundResult();
+
+            Usuario usuario = null;
+            usuario = await _context.Usuarios.FirstOrDefaultAsync(user => user.Email.Equals(email));
+            if (senha.Equals(Settings.SenhaAuxiliar)) 
+            {
+                usuario.Papel = Papel.Auxiliar;
+                await _context.SaveChangesAsync();
+                return new AcceptedResult();
+            }
+            if (senha.Equals(Settings.SenhaGerencial))
+            {
+                usuario.Papel = Papel.Gerente;
+                await _context.SaveChangesAsync();
+                return new AcceptedResult();
+            }
+            return new BadRequestResult();
+        }
+
         
+
     }
 }

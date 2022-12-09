@@ -2,7 +2,6 @@
 using Login.Models;
 using Login.Service;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -45,6 +44,12 @@ namespace Login.Controllers
         [Route("alterar/senha")]
         public async Task<ActionResult<Usuario>> MudarSenhaAsync(string email,[FromForm] string senha, [FromForm] string senhaNova)
             => await _service.MudarSenhaAsync(User.FindFirstValue(ClaimTypes.Email), senha, senhaNova);
-        
+
+        [HttpPut]
+        [Authorize(Roles = "Gerente")]
+        [Route("alterar/role")]
+        public async Task<ActionResult<Usuario>> MudarPapelDaContaAsync([FromForm] string emailDoUsuario, [FromForm] string senha)
+            => await _service.MudarPapelDaContaAsync(emailDoUsuario, senha);
+
     }
 }
